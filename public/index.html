@@ -496,23 +496,61 @@
     .detail-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 13px 14px;
+      gap: 6px;
+      padding: 7px 8px 7px 12px;
       border-radius: var(--radius-inner);
       background: var(--surface-tile);
       border: 1px solid var(--border-hairline);
-      transition: transform 220ms var(--ease-spring), background-color 180ms ease;
+      transition: transform 200ms var(--ease-spring), background-color 180ms ease, border-color 180ms ease;
+    }
+
+    .detail-row:hover {
+      background: var(--surface-tile-hover);
+      border-color: var(--border-strong);
+    }
+
+    .detail-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      padding: 5px 0;
+    }
+
+    .detail-link:active {
+      transform: scale(0.985);
+      transition-duration: 50ms;
     }
 
     .detail-icon {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 12px;
       background: var(--accent-soft);
       color: var(--accent);
       display: grid;
       place-items: center;
       flex-shrink: 0;
+      transition: transform 180ms ease;
+    }
+
+    .detail-link:hover .detail-icon {
+      transform: scale(1.05);
+    }
+
+    .detail-icon--instagram {
+      background: rgba(225, 48, 108, 0.14);
+      color: #E1306C;
+    }
+
+    [data-theme="light"] .detail-icon--instagram {
+      background: rgba(225, 48, 108, 0.10);
+      color: #D62976;
     }
 
     .detail-body {
@@ -536,7 +574,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-decoration: none;
       user-select: text;
       -webkit-user-select: text;
     }
@@ -545,10 +582,26 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .detail-chevron {
+      color: var(--text-muted);
+      opacity: 0.45;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-right: 4px;
+      transition: transform 180ms ease, opacity 180ms ease, color 180ms ease;
+    }
+
+    .detail-link:hover .detail-chevron {
+      opacity: 1;
+      transform: translateX(2px);
+      color: var(--accent);
+    }
+
     .copy-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
       border: 1px solid var(--border-hairline);
       background: transparent;
       color: var(--text-secondary);
@@ -556,7 +609,12 @@
       place-items: center;
       cursor: pointer;
       flex-shrink: 0;
-      transition: transform 200ms var(--ease-spring), background-color 150ms ease, color 150ms ease;
+      transition: transform 200ms var(--ease-spring), background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--surface-tile-hover);
+      color: var(--text-primary);
     }
 
     .copy-btn:active {
@@ -567,7 +625,7 @@
     .copy-btn.copied {
       color: #22C55E;
       border-color: rgba(34, 197, 94, 0.35);
-      background: rgba(34, 197, 94, 0.10);
+      background: rgba(34, 197, 94, 0.12);
     }
 
     /* Footer */
@@ -665,9 +723,52 @@
       display: block;
     }
 
+    .sheet-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .sheet-action-btn {
+      width: 100%;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid var(--border-hairline);
+      background: var(--surface-tile);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 200ms var(--ease-spring), background-color 150ms ease;
+    }
+
+    .sheet-action-btn:active {
+      transform: scale(0.97);
+    }
+
+    .sheet-action-btn--wa {
+      background: #25D366;
+      color: #FFFFFF;
+      border: none;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+    }
+
+    .sheet-action-btn--wa:hover {
+      background: #20bd5a;
+    }
+
     .sheet-close {
       width: 100%;
-      height: 48px;
+      max-width: 320px;
+      height: 46px;
       border-radius: 14px;
       border: 1px solid var(--border-hairline);
       background: var(--surface-tile);
@@ -793,21 +894,21 @@
 
       <!-- Quick Action Tiles -->
       <div class="quick-grid">
-        <a class="quick-tile" href="tel:+573195731772" data-haptic="1">
+        <a class="quick-tile" id="callTile" href="tel:+573195731772" data-haptic="1" aria-label="Llamar a Mateo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
           <span>Llamar</span>
         </a>
 
-        <a class="quick-tile" href="https://wa.me/573195731772?text=Hola%20Mateo%2C%20vi%20tu%20tarjeta%20digital%20de%20%40ciencia_en_1minuto" target="_blank" rel="noopener noreferrer" data-haptic="1">
+        <a class="quick-tile" id="whatsappTile" href="https://wa.me/573195731772?text=Hola%20Mateo%2C%20vi%20tu%20tarjeta%20digital%20de%20%40ciencia_en_1minuto" target="_blank" rel="noopener noreferrer" data-haptic="1" aria-label="Escribir por WhatsApp a Mateo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
           </svg>
           <span>WhatsApp</span>
         </a>
 
-        <a class="quick-tile" href="mailto:mateovillarrealsanchez2021@gmail.com" data-haptic="1">
+        <a class="quick-tile" id="emailTile" href="mailto:mateovillarrealsanchez2021@gmail.com" data-haptic="1" aria-label="Enviar correo a Mateo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="16" x="2" y="4" rx="2"/>
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
@@ -815,7 +916,7 @@
           <span>Correo</span>
         </a>
 
-        <button class="quick-tile" id="shareBtn" type="button" data-haptic="1">
+        <button class="quick-tile" id="shareBtn" type="button" data-haptic="1" aria-label="Compartir tarjeta de Mateo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
             <polyline points="16 6 12 2 8 6"/>
@@ -829,17 +930,25 @@
       <div class="details-group">
         <div class="section-label">Información directa</div>
 
+        <!-- Fila 1: Teléfono (Click en la fila llama de inmediato) -->
         <div class="detail-row">
-          <div class="detail-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
-              <path d="M12 18h.01"/>
-            </svg>
-          </div>
-          <div class="detail-body">
-            <span class="detail-label">Móvil / Trabajo</span>
-            <a class="detail-value tabular" href="tel:+573195731772">+57 319 573 1772</a>
-          </div>
+          <a class="detail-link" id="detailPhoneLink" href="tel:+573195731772" aria-label="Llamar al +57 319 573 1772">
+            <div class="detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+                <path d="M12 18h.01"/>
+              </svg>
+            </div>
+            <div class="detail-body">
+              <span class="detail-label">Móvil / Llamada directa</span>
+              <span class="detail-value tabular">+57 319 573 1772</span>
+            </div>
+            <div class="detail-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
+          </a>
           <button class="copy-btn" type="button" data-copy="+573195731772" data-label="Teléfono copiado" aria-label="Copiar teléfono">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
               <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
@@ -848,17 +957,25 @@
           </button>
         </div>
 
+        <!-- Fila 2: Correo (Click en la fila abre la app de correo) -->
         <div class="detail-row">
-          <div class="detail-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="20" height="16" x="2" y="4" rx="2"/>
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            </svg>
-          </div>
-          <div class="detail-body">
-            <span class="detail-label">Correo electrónico</span>
-            <a class="detail-value" href="mailto:mateovillarrealsanchez2021@gmail.com">mateovillarrealsanchez2021@gmail.com</a>
-          </div>
+          <a class="detail-link" id="detailEmailLink" href="mailto:mateovillarrealsanchez2021@gmail.com" aria-label="Enviar correo a mateovillarrealsanchez2021@gmail.com">
+            <div class="detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+            </div>
+            <div class="detail-body">
+              <span class="detail-label">Correo electrónico</span>
+              <span class="detail-value">mateovillarrealsanchez2021@gmail.com</span>
+            </div>
+            <div class="detail-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
+          </a>
           <button class="copy-btn" type="button" data-copy="mateovillarrealsanchez2021@gmail.com" data-label="Correo copiado" aria-label="Copiar correo">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
               <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
@@ -867,19 +984,29 @@
           </button>
         </div>
 
+        <!-- Fila 3: Instagram (Click en la fila abre Instagram de Mateo) -->
         <div class="detail-row">
-          <div class="detail-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-              <path d="M2 12h20"/>
-            </svg>
-          </div>
-          <div class="detail-body">
-            <span class="detail-label">Proyecto &amp; Comunidad</span>
-            <a class="detail-value" href="https://instagram.com/ciencia_en_1minuto" target="_blank" rel="noopener noreferrer">@ciencia_en_1minuto · Space4us</a>
-          </div>
-          <button class="copy-btn" type="button" data-copy="@ciencia_en_1minuto" data-label="Usuario copiado" aria-label="Copiar usuario">
+          <a class="detail-link" id="detailInstagramLink" href="https://www.instagram.com/ciencia_en_1minuto/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram @ciencia_en_1minuto">
+            <div class="detail-icon detail-icon--instagram">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+              </svg>
+            </div>
+            <div class="detail-body">
+              <span class="detail-label">Instagram Oficial</span>
+              <span class="detail-value">@ciencia_en_1minuto · Space4us</span>
+            </div>
+            <div class="detail-chevron" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </div>
+          </a>
+          <button class="copy-btn" type="button" data-copy="https://www.instagram.com/ciencia_en_1minuto/" data-label="Enlace copiado" aria-label="Copiar enlace de Instagram">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
               <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
               <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
@@ -894,14 +1021,32 @@
     </footer>
   </main>
 
-  <!-- iOS Bottom Sheet for QR Code -->
+  <!-- iOS Bottom Sheet for Share & QR Code -->
   <div class="sheet-backdrop" id="sheetBackdrop"></div>
-  <aside class="sheet" id="qrSheet" role="dialog" aria-modal="true" aria-labelledby="qrSheetTitle">
+  <aside class="sheet" id="shareSheet" role="dialog" aria-modal="true" aria-labelledby="shareSheetTitle">
     <div class="sheet-handle" aria-hidden="true"></div>
-    <h2 class="sheet-title" id="qrSheetTitle">Escanear vCard</h2>
-    <p class="sheet-sub">Apunta la cámara para abrir el contacto de Mateo</p>
+    <h2 class="sheet-title" id="shareSheetTitle">Compartir Contacto</h2>
+    <p class="sheet-sub">Apunta la cámara al código QR o comparte directamente el perfil</p>
     <div class="qr-box" id="qrBox" aria-label="Código QR de la tarjeta digital"></div>
-    <button class="sheet-close" id="qrCloseBtn" type="button">Listo</button>
+
+    <div class="sheet-actions">
+      <a class="sheet-action-btn sheet-action-btn--wa" id="sheetWaBtn" href="https://api.whatsapp.com/send?text=Te%20comparto%20el%20contacto%20de%20Mateo%20Villarreal%20(@ciencia_en_1minuto):%20https://ciencia1minuto-24f9f.web.app" target="_blank" rel="noopener noreferrer">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        </svg>
+        Compartir por WhatsApp
+      </a>
+
+      <button class="sheet-action-btn" id="sheetCopyLinkBtn" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+        </svg>
+        Copiar Enlace
+      </button>
+    </div>
+
+    <button class="sheet-close" id="sheetCloseBtn" type="button">Listo</button>
   </aside>
 
   <!-- Feedback Toast -->
@@ -955,9 +1100,11 @@
       applyTheme(next);
     });
 
-    // Copy buttons with tactile feedback
+    // Copy buttons with tactile feedback and stopPropagation
     document.querySelectorAll('.copy-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const text = btn.getAttribute('data-copy');
         const label = btn.getAttribute('data-label') || 'Copiado';
         haptic(12);
@@ -979,43 +1126,90 @@
       });
     });
 
-    // Save vCard feedback (uses native ./mateo-villarreal.vcf with embedded photo)
-    document.getElementById('saveVcfBtn').addEventListener('click', () => {
-      haptic([12, 24, 12]);
-      showToast('Descargando contacto de Mateo...');
+    // Save vCard (Native Contacts import for iOS / Download for Android & Desktop)
+    const saveVcfBtn = document.getElementById('saveVcfBtn');
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    if (isIOS) {
+      // In iOS Safari, having the download attribute causes Safari to download the file into Files instead of opening Contacts
+      saveVcfBtn.removeAttribute('download');
+    }
+
+    saveVcfBtn.addEventListener('click', (e) => {
+      haptic([14, 28, 14]);
+      showToast('📇 Abriendo contacto para guardar...');
+      if (isIOS) {
+        e.preventDefault();
+        window.location.href = './mateo-villarreal.vcf';
+      }
     });
 
-    // Native Web Share API with Clipboard fallback
-    document.getElementById('shareBtn').addEventListener('click', async () => {
+    // Call handlers
+    function handleCallClick(e) {
       haptic(10);
-      const shareData = {
-        title: 'Mateo Villarreal Sanchez · @ciencia_en_1minuto',
-        text: 'Tarjeta de contacto de Mateo Villarreal Sanchez — Divulgador científico | Space4us',
-        url: PROFILE_URL
-      };
-      if (navigator.share) {
+      const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+      if (!isMobile) {
         try {
-          await navigator.share(shareData);
-          return;
-        } catch (err) {
-          if (err && err.name === 'AbortError') return;
-        }
+          navigator.clipboard.writeText('+573195731772');
+          showToast('📞 Llamando al +57 319 573 1772 (número copiado)');
+        } catch (_) {}
       }
-      try {
-        await navigator.clipboard.writeText(PROFILE_URL);
-        showToast('Enlace copiado para compartir');
-      } catch (_) {
-        showToast(PROFILE_URL);
-      }
-    });
+    }
+    const callTile = document.getElementById('callTile');
+    const detailPhoneLink = document.getElementById('detailPhoneLink');
+    if (callTile) callTile.addEventListener('click', handleCallClick);
+    if (detailPhoneLink) detailPhoneLink.addEventListener('click', handleCallClick);
 
-    // iOS QR Bottom Sheet (interruptible + swipe-down gesture)
+    // Email handlers
+    function handleEmailClick(e) {
+      haptic(10);
+      const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+      if (!isMobile) {
+        try {
+          navigator.clipboard.writeText('mateovillarrealsanchez2021@gmail.com');
+          showToast('✉️ Abriendo correo (correo copiado al portapapeles)');
+        } catch (_) {}
+      }
+    }
+    const emailTile = document.getElementById('emailTile');
+    const detailEmailLink = document.getElementById('detailEmailLink');
+    if (emailTile) emailTile.addEventListener('click', handleEmailClick);
+    if (detailEmailLink) detailEmailLink.addEventListener('click', handleEmailClick);
+
+    // WhatsApp handler
+    const whatsappTile = document.getElementById('whatsappTile');
+    if (whatsappTile) {
+      whatsappTile.addEventListener('click', () => {
+        haptic(10);
+        showToast('Abriendo WhatsApp...');
+      });
+    }
+
+    // Instagram handler
+    const detailInstagramLink = document.getElementById('detailInstagramLink');
+    if (detailInstagramLink) {
+      detailInstagramLink.addEventListener('click', () => {
+        haptic(10);
+        showToast('Abriendo Instagram de Mateo...');
+      });
+    }
+
+    // Share & QR Bottom Sheet
+    const shareBtn = document.getElementById('shareBtn');
     const qrOpenBtn = document.getElementById('qrOpenBtn');
-    const qrCloseBtn = document.getElementById('qrCloseBtn');
+    const sheetCloseBtn = document.getElementById('sheetCloseBtn');
     const sheetBackdrop = document.getElementById('sheetBackdrop');
-    const qrSheet = document.getElementById('qrSheet');
+    const shareSheet = document.getElementById('shareSheet');
     const qrBox = document.getElementById('qrBox');
+    const sheetCopyLinkBtn = document.getElementById('sheetCopyLinkBtn');
+    const sheetWaBtn = document.getElementById('sheetWaBtn');
     let qrRendered = false;
+
+    // Dynamic WhatsApp share message
+    if (sheetWaBtn) {
+      sheetWaBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('Te comparto el contacto de Mateo Villarreal (@ciencia_en_1minuto): ' + PROFILE_URL)}`;
+    }
 
     function renderQR() {
       if (qrRendered) return;
@@ -1034,46 +1228,84 @@
       haptic(10);
       renderQR();
       sheetBackdrop.classList.add('open');
-      qrSheet.classList.add('open');
+      shareSheet.classList.add('open');
     }
 
     function closeSheet() {
       sheetBackdrop.classList.remove('open');
-      qrSheet.classList.remove('open');
-      qrSheet.style.transform = '';
+      shareSheet.classList.remove('open');
+      shareSheet.style.transform = '';
     }
 
     qrOpenBtn.addEventListener('click', openSheet);
-    qrCloseBtn.addEventListener('click', () => { haptic(8); closeSheet(); });
+    sheetCloseBtn.addEventListener('click', () => { haptic(8); closeSheet(); });
     sheetBackdrop.addEventListener('click', closeSheet);
+
+    // Share Button: Native Web Share API on mobile, or bottom sheet on desktop/fallback
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        haptic(10);
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const shareData = {
+          title: 'Mateo Villarreal Sanchez · @ciencia_en_1minuto',
+          text: 'Tarjeta de contacto de Mateo Villarreal Sanchez — Divulgador científico | Space4us',
+          url: PROFILE_URL
+        };
+
+        if (isMobile && navigator.share) {
+          try {
+            await navigator.share(shareData);
+            return;
+          } catch (err) {
+            if (err && err.name === 'AbortError') return;
+          }
+        }
+
+        openSheet();
+      });
+    }
+
+    // Copy link inside bottom sheet
+    if (sheetCopyLinkBtn) {
+      sheetCopyLinkBtn.addEventListener('click', async () => {
+        haptic(10);
+        try {
+          await navigator.clipboard.writeText(PROFILE_URL);
+          showToast('¡Enlace copiado al portapapeles!');
+        } catch (_) {
+          showToast(PROFILE_URL);
+        }
+      });
+    }
 
     // Swipe-down to dismiss sheet (iOS physics feel)
     let touchStartY = 0;
     let deltaY = 0;
-    qrSheet.addEventListener('touchstart', (e) => {
+    shareSheet.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
       deltaY = 0;
-      qrSheet.style.transition = 'none';
+      shareSheet.style.transition = 'none';
     }, { passive: true });
 
-    qrSheet.addEventListener('touchmove', (e) => {
+    shareSheet.addEventListener('touchmove', (e) => {
       const dy = e.touches[0].clientY - touchStartY;
       if (dy > 0) {
         deltaY = dy;
-        qrSheet.style.transform = `translate(-50%, ${dy}px)`;
+        shareSheet.style.transform = `translate(-50%, ${dy}px)`;
       }
     }, { passive: true });
 
-    qrSheet.addEventListener('touchend', () => {
-      qrSheet.style.transition = '';
+    shareSheet.addEventListener('touchend', () => {
+      shareSheet.style.transition = '';
       if (deltaY > 90) {
         closeSheet();
       } else {
-        qrSheet.style.transform = '';
+        shareSheet.style.transform = '';
       }
     });
 
-    // Haptics on quick tiles
+    // General haptics on elements with data-haptic
     document.querySelectorAll('[data-haptic]').forEach((el) => {
       el.addEventListener('click', () => haptic(8));
     });
