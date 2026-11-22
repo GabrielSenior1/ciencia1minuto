@@ -1,0 +1,23 @@
+{
+  "name": "Mateo Villarreal Sanchez · vCard",
+  "short_name": "Mateo · Ciencia",
+  "description": "Tarjeta digital de contacto de Mateo Villarreal Sanchez — Divulgador científico | Space4us | @ciencia_en_1minuto",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070B14",
+  "theme_color": "#070B14",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
