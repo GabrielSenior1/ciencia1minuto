@@ -303,6 +303,19 @@
       position: relative;
       width: 118px;
       height: 118px;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: transform 220ms var(--ease-spring);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .avatar-wrap:hover {
+      transform: scale(1.04);
+    }
+
+    .avatar-wrap:active {
+      transform: scale(0.96);
+      transition-duration: 50ms;
     }
 
     .avatar-ring {
@@ -314,6 +327,13 @@
       box-shadow:
         0 10px 28px -8px rgba(37, 99, 235, 0.5),
         0 0 0 4px rgba(59, 130, 246, 0.08);
+      transition: box-shadow 220ms ease;
+    }
+
+    .avatar-wrap:hover .avatar-ring {
+      box-shadow:
+        0 14px 32px -6px rgba(37, 99, 235, 0.65),
+        0 0 0 5px rgba(59, 130, 246, 0.20);
     }
 
     .avatar-img {
@@ -325,6 +345,29 @@
       display: block;
       background: #0F172A;
       border: 2.5px solid var(--bg-base);
+    }
+
+    .expand-badge {
+      position: absolute;
+      left: 2px;
+      bottom: 2px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--surface-card);
+      color: var(--accent);
+      border: 2px solid var(--bg-base);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 10px rgba(2, 6, 23, 0.35);
+      backdrop-filter: blur(8px);
+      transition: transform 180ms ease, background-color 150ms ease, color 150ms ease;
+    }
+
+    .avatar-wrap:hover .expand-badge {
+      transform: scale(1.12);
+      background: var(--accent);
+      color: #FFFFFF;
     }
 
     .verified-badge {
@@ -786,6 +829,114 @@
     }
 
     /* ============================================================
+       AVATAR EXPANDED LIGHTBOX MODAL
+       ============================================================ */
+    .avatar-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .avatar-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .avatar-modal-dialog {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      transform: scale(0.85);
+      transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .avatar-modal-backdrop.open .avatar-modal-dialog {
+      transform: scale(1);
+    }
+
+    .avatar-modal-close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: transform 180ms ease, background-color 150ms ease;
+    }
+
+    .avatar-modal-close:hover {
+      background: rgba(255, 255, 255, 0.24);
+      transform: scale(1.08);
+    }
+
+    .avatar-modal-close:active {
+      transform: scale(0.92);
+    }
+
+    .avatar-modal-media {
+      width: min(80vw, 310px);
+      height: min(80vw, 310px);
+      border-radius: 50%;
+      padding: 5px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(239, 68, 68, 0.65) 50%, rgba(56, 189, 248, 0.9));
+      box-shadow:
+        0 24px 60px -10px rgba(0, 0, 0, 0.85),
+        0 0 45px rgba(59, 130, 246, 0.4);
+    }
+
+    .avatar-modal-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+      border: 3.5px solid #070B14;
+    }
+
+    .avatar-modal-caption {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 5px;
+    }
+
+    .avatar-modal-name {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.02em;
+    }
+
+    .avatar-modal-sub {
+      font-size: 13.5px;
+      color: #94A3B8;
+    }
+
+    /* ============================================================
        FLOATING TOAST PILL (Dynamic Island / Sonner-inspired)
        ============================================================ */
     .toast {
@@ -852,9 +1003,17 @@
     <section class="card" aria-label="Tarjeta de contacto de Mateo Villarreal Sanchez">
       <!-- Profile Hero -->
       <div class="hero">
-        <div class="avatar-wrap">
+        <div class="avatar-wrap" id="avatarWrap" role="button" tabindex="0" aria-label="Ver foto de perfil de Mateo ampliada" title="Toca para ampliar foto">
           <div class="avatar-ring">
             <img src="./avatar.jpg" alt="Mateo Villarreal Sanchez" class="avatar-img" id="avatarImg">
+          </div>
+          <div class="expand-badge" aria-hidden="true" title="Ampliar">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 3 21 3 21 9"/>
+              <polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/>
+              <line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
           </div>
           <div class="verified-badge" title="Divulgador Científico">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1048,6 +1207,25 @@
 
     <button class="sheet-close" id="sheetCloseBtn" type="button">Listo</button>
   </aside>
+
+  <!-- Expanded Profile Photo Modal (Lightbox) -->
+  <div class="avatar-modal-backdrop" id="avatarModalBackdrop" role="dialog" aria-modal="true" aria-label="Foto de perfil ampliada">
+    <div class="avatar-modal-dialog" id="avatarModalDialog">
+      <button class="avatar-modal-close" id="avatarModalClose" type="button" aria-label="Cerrar foto ampliada">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="avatar-modal-media">
+        <img src="./avatar.jpg" alt="Mateo Villarreal Sanchez" class="avatar-modal-img">
+      </div>
+      <div class="avatar-modal-caption">
+        <span class="avatar-modal-name">Mateo Villarreal Sanchez</span>
+        <span class="avatar-modal-sub">Divulgador científico · @ciencia_en_1minuto</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Feedback Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1309,6 +1487,68 @@
     document.querySelectorAll('[data-haptic]').forEach((el) => {
       el.addEventListener('click', () => haptic(8));
     });
+
+    // Avatar Lightbox Expansion
+    const avatarWrap = document.getElementById('avatarWrap');
+    const avatarModalBackdrop = document.getElementById('avatarModalBackdrop');
+    const avatarModalClose = document.getElementById('avatarModalClose');
+    const avatarModalDialog = document.getElementById('avatarModalDialog');
+
+    function openAvatarModal() {
+      haptic(10);
+      avatarModalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAvatarModal() {
+      haptic(8);
+      avatarModalBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    if (avatarWrap) {
+      avatarWrap.addEventListener('click', openAvatarModal);
+      avatarWrap.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openAvatarModal();
+        }
+      });
+    }
+
+    if (avatarModalClose) avatarModalClose.addEventListener('click', closeAvatarModal);
+    if (avatarModalBackdrop) {
+      avatarModalBackdrop.addEventListener('click', (e) => {
+        if (e.target === avatarModalBackdrop) closeAvatarModal();
+      });
+    }
+
+    // Escape key closes modals
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (avatarModalBackdrop && avatarModalBackdrop.classList.contains('open')) {
+          closeAvatarModal();
+        }
+        if (shareSheet && shareSheet.classList.contains('open')) {
+          closeSheet();
+        }
+      }
+    });
+
+    // Touch gesture swipe to dismiss avatar modal
+    let avatarTouchY = 0;
+    if (avatarModalDialog) {
+      avatarModalDialog.addEventListener('touchstart', (e) => {
+        avatarTouchY = e.touches[0].clientY;
+      }, { passive: true });
+
+      avatarModalDialog.addEventListener('touchend', (e) => {
+        const diffY = Math.abs(e.changedTouches[0].clientY - avatarTouchY);
+        if (diffY > 60) {
+          closeAvatarModal();
+        }
+      });
+    }
   </script>
 </body>
 </html>
